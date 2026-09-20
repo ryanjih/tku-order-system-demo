@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}訂單 {{ o['order_id'] }}{% endblock %}
+{% block body %}
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="card"><div class="card-body p-4">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <h2 class="page-title mb-1">訂單 {{ o['order_id'] }}</h2>
+          <p class="text-muted mb-0">下單日期 {{ o['order_date'] }}　業務 {{ o['sales_rep'] }}</p>
+        </div>
+        {% set c = {'已完成':'success','已出貨':'info','處理中':'warning','已取消':'secondary'} %}
+        <span class="badge fs-6 text-bg-{{ c.get(o['status'],'light') }}">{{ o['status'] }}</span>
+      </div>
+      <hr>
+      <h6 class="text-muted">客戶資料</h6>
+      <p class="mb-3"><strong>{{ o['customer_name'] }}</strong><br>
+        {{ o['phone'] }}<br>{{ o['address'] }}</p>
+      <h6 class="text-muted">訂單明細</h6>
+      <table class="table">
+        <thead><tr><th>商品</th><th class="text-end">單價</th><th class="text-end">數量</th><th class="text-end">小計</th></tr></thead>
+        <tbody>
+        {% for i in items %}
+        <tr><td>{{ i['name'] }}</td>
+            <td class="text-end">{{ '{:,.0f}'.format(i['unit_price']) }}</td>
+            <td class="text-end">{{ i['qty'] }}</td>
+            <td class="text-end">{{ '{:,.0f}'.format(i['subtotal']) }}</td></tr>
+        {% endfor %}
+        </tbody>
+        <tfoot><tr class="table-light"><th colspan="3" class="text-end">總計</th>
+          <th class="text-end fs-5">NT$ {{ '{:,.0f}'.format(total) }}</th></tr></tfoot>
+      </table>
+    </div></div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card"><div class="card-body p-4 text-center">
+      <h5>出貨單 QRCode</h5>
+      <img src="{{ url_for('order_qrcode', order_id=o['order_id']) }}"
+           class="img-fluid my-3" style="max-width:220px" alt="QRCode">
+      <p class="text-muted small mb-0">貼在出貨箱上,客戶掃描即可查看這一頁。</p>
+    </div></div>
+  </div>
+</div>
+{% endblock %}

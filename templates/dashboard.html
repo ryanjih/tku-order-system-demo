@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}營運儀表板{% endblock %}
+{% block body %}
+<h1 class="page-title">營運儀表板</h1>
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3"><div class="card kpi h-100"><div class="card-body">
+    <div class="lbl">累計營收(不含取消)</div><div class="val">NT$ {{ '{:,.0f}'.format(kpi_rev) }}</div></div></div></div>
+  <div class="col-6 col-lg-3"><div class="card kpi o h-100"><div class="card-body">
+    <div class="lbl">有效訂單數</div><div class="val">{{ kpi_ord }}</div></div></div></div>
+  <div class="col-6 col-lg-3"><div class="card kpi g h-100"><div class="card-body">
+    <div class="lbl">平均客單價</div><div class="val">NT$ {{ '{:,.0f}'.format(aov) }}</div></div></div></div>
+  <div class="col-6 col-lg-3"><div class="card kpi p h-100"><div class="card-body">
+    <div class="lbl">客戶數</div><div class="val">{{ kpi_cus }}</div></div></div></div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-8"><div class="card h-100">
+    <div class="card-header">每月營收趨勢</div>
+    <div class="card-body"><canvas id="c1" height="120"></canvas></div></div></div>
+  <div class="col-lg-4"><div class="card h-100">
+    <div class="card-header">訂單狀態分布</div>
+    <div class="card-body"><canvas id="c2" height="190"></canvas></div></div></div>
+
+  <div class="col-lg-6"><div class="card h-100">
+    <div class="card-header">熱銷商品 Top 5</div>
+    <div class="card-body p-0"><table class="table table-sm mb-0">
+      <thead><tr><th>商品</th><th class="text-end">售出數量</th><th class="text-end">營收</th></tr></thead>
+      <tbody>{% for r in top_products %}<tr>
+        <td>{{ r['name'] }}</td><td class="text-end">{{ r['qty'] }}</td>
+        <td class="text-end">{{ '{:,.0f}'.format(r['rev']) }}</td></tr>{% endfor %}</tbody>
+    </table></div></div></div>
+
+  <div class="col-lg-6"><div class="card h-100">
+    <div class="card-header">客戶消費排行 Top 5</div>
+    <div class="card-body p-0"><table class="table table-sm mb-0">
+      <thead><tr><th>客戶</th><th class="text-end">訂單數</th><th class="text-end">消費金額</th></tr></thead>
+      <tbody>{% for r in top_customers %}<tr>
+        <td>{{ r['name'] }}</td><td class="text-end">{{ r['n'] }}</td>
+        <td class="text-end">{{ '{:,.0f}'.format(r['rev']) }}</td></tr>{% endfor %}</tbody>
+    </table></div></div></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+new Chart(document.getElementById('c1'), {
+  type:'line',
+  data:{ labels:{{ monthly|map(attribute='ym')|list|tojson }},
+         datasets:[{ label:'營收(NT$)',
+            data:{{ monthly|map(attribute='rev')|list|tojson }},
+            borderColor:'#156082', backgroundColor:'rgba(21,96,130,.12)',
+            fill:true, tension:.3, pointRadius:4 }] },
+  options:{ plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}} }
+});
+new Chart(document.getElementById('c2'), {
+  type:'doughnut',
+  data:{ labels:{{ by_status|map(attribute='status')|list|tojson }},
+         datasets:[{ data:{{ by_status|map(attribute='n')|list|tojson }},
+            backgroundColor:['#156082','#E97132','#196B24','#A02B93'] }] },
+  options:{ plugins:{legend:{position:'bottom'}} }
+});
+</script>
+{% endblock %}

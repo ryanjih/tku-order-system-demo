@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block body %}
+<h1 class="page-title">客戶資料 <span class="text-muted fs-6">customer</span></h1>
+<div class="card"><table class="table table-hover mb-0">
+<thead><tr><th>客戶編號</th><th>名稱</th><th>電話</th><th>地址</th><th class="text-end">訂單數</th></tr></thead>
+<tbody>{% for r in rows %}<tr>
+  <td><code>{{ r['customer_id'] }}</code></td><td>{{ r['name'] }}</td>
+  <td>{{ r['phone'] }}</td><td class="small text-muted">{{ r['address'] }}</td>
+  <td class="text-end"><span class="badge text-bg-light">{{ r['n'] }}</span></td></tr>{% endfor %}</tbody>
+</table></div>
+<p class="text-muted small mt-2">客戶資料只存一份 — 改電話只改這裡一列,這就是「一對多」拆表的好處。</p>
+{% endblock %}

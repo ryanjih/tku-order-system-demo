@@ -1,0 +1,40 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:                              # ── CI:先驗證
+    runs-on: ubuntu-latest
+    steps:
+      - name: 取出程式碼
+        uses: actions/checkout@v4
+
+      - name: 安裝 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 安裝套件
+        run: pip install -r requirements.txt
+
+      - name: 執行自動測試
+        run: pytest -v
+
+  deploy:                            # ── CD:測試過了才部署
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 觸發 Render 部署
+        run: |
+          if [ -z "${RENDER_DEPLOY_HOOK}" ]; then
+            echo "尚未設定 RENDER_DEPLOY_HOOK,跳過部署"
+            exit 0
+          fi
+          curl -fsSL "${RENDER_DEPLOY_HOOK}"
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}新增訂單{% endblock %}
+{% block body %}
+<h1 class="page-title">新增訂單</h1>
+<form method="post">
+<div class="row g-3">
+  <div class="col-lg-5"><div class="card h-100"><div class="card-body">
+    <h5 class="mb-3">訂單主檔 <span class="text-muted small">(orders)</span></h5>
+    <div class="mb-3"><label class="form-label">訂單編號</label>
+      <input name="order_id" class="form-control" value="{{ suggest }}" required>
+      <div class="form-text">格式 SO + 數字,系統會檢查是否重複</div></div>
+    <div class="mb-3"><label class="form-label">客戶</label>
+      <select name="customer_id" class="form-select" required>
+        <option value="">— 請選擇 —</option>
+        {% for c in customers %}<option value="{{ c['customer_id'] }}">{{ c['customer_id'] }}｜{{ c['name'] }}</option>{% endfor %}
+      </select>
+      <div class="form-text">下拉選單來自 customer 資料表,避免打錯名稱</div></div>
+    <div class="mb-3"><label class="form-label">訂單日期</label>
+      <input type="date" name="order_date" class="form-control" value="{{ today }}"></div>
+    <div class="mb-0"><label class="form-label">業務人員</label>
+      <input name="sales_rep" class="form-control" placeholder="例:林佳穎"></div>
+  </div></div></div>
+
+  <div class="col-lg-7"><div class="card h-100"><div class="card-body">
+    <h5 class="mb-3">訂單明細 <span class="text-muted small">(order_item,多對多中間表)</span></h5>
+    <table class="table table-sm align-middle">
+      <thead><tr><th>商品</th><th class="text-end">單價</th><th style="width:120px">數量</th></tr></thead>
+      <tbody>
+      {% for p in products %}
+      <tr>
+        <td>{{ p['name'] }}<div class="text-muted small">{{ p['product_id'] }}｜庫存 {{ p['stock'] }}</div></td>
+        <td class="text-end">{{ '{:,.0f}'.format(p['unit_price']) }}</td>
+        <td><input name="qty_{{ p['product_id'] }}" class="form-control form-control-sm"
+                   inputmode="numeric" placeholder="0"></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <p class="text-muted small">留空代表不購買。送出後,明細會寫入「下單當時的單價」。</p>
+    <button class="btn btn-primary btn-lg w-100">建立訂單</button>
+  </div></div></div>
+</div>
+</form>
+{% endblock %}

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}訂單管理系統{% endblock %}</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark app-nav">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">📦 訂單管理系統</a>
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto">
+        {% if session.get('role') == 'admin' %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">營運儀表板</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_orders') }}">訂單管理</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_products') }}">商品</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_customers') }}">客戶</a></li>
+          <li class="nav-item"><a class="nav-link text-warning" href="{{ url_for('logout') }}">登出 ({{ session.get('user') }})</a></li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">管理員登入</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="container py-4">
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, m in msgs %}
+      <div class="alert alert-{{ cat }} py-2">{{ m }}</div>
+    {% endfor %}
+  {% endwith %}
+  {% block body %}{% endblock %}
+</main>
+
+<footer class="text-center text-muted py-4 small">
+  淡江大學 AI 與商業數據班 ｜ Vibe Coding 實作範例
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

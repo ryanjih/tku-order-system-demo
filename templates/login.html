@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="row justify-content-center"><div class="col-md-5">
+  <div class="card"><div class="card-body p-4">
+    <h3 class="page-title">管理員登入</h3>
+    <form method="post">
+      <div class="mb-3"><label class="form-label">帳號</label>
+        <input name="username" class="form-control" value="admin" required></div>
+      <div class="mb-3"><label class="form-label">密碼</label>
+        <input name="password" type="password" class="form-control" required></div>
+      <button class="btn btn-primary w-100">登入</button>
+    </form>
+    <p class="text-muted small mt-3 mb-0">
+      密碼以 <code>werkzeug</code> 雜湊儲存於資料庫,程式與畫面都不出現明碼。
+    </p>
+  </div></div>
+</div></div>
+{% endblock %}

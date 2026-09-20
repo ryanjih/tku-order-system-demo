@@ -1,0 +1,13 @@
+# 虛擬環境 — 絕對不要進版控
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# 資料庫與機密 — 絕對不要上傳
+*.db
+.env
+secrets.json
+
+# 作業系統
+.DS_Store

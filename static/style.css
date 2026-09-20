@@ -1,0 +1,15 @@
+body { background:#f4f6f8; font-family:"Microsoft JhengHei UI","PingFang TC","Noto Sans TC",system-ui,sans-serif; }
+.app-nav { background:#0E2841; }
+.card { border:0; box-shadow:0 1px 3px rgba(16,40,64,.10); border-radius:10px; }
+.card-header { background:#fff; border-bottom:1px solid #e9eef3; font-weight:700; color:#0E2841; }
+.kpi { border-left:5px solid #156082; }
+.kpi .val { font-size:1.9rem; font-weight:800; color:#0E2841; letter-spacing:-.5px; }
+.kpi .lbl { color:#6b7b8a; font-size:.86rem; }
+.kpi.o { border-left-color:#E97132; }
+.kpi.g { border-left-color:#196B24; }
+.kpi.p { border-left-color:#A02B93; }
+.table thead th { background:#eef3f7; color:#0E2841; font-size:.9rem; white-space:nowrap; }
+.table td, .table th { vertical-align:middle; }
+.badge-st { font-weight:600; }
+h1,h2,h3,h4 { color:#0E2841; }
+.page-title { font-weight:800; margin-bottom:1rem; }

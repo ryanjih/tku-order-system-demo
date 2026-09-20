@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="row g-4 align-items-stretch">
+  <div class="col-lg-7">
+    <div class="card h-100"><div class="card-body p-4">
+      <h1 class="page-title">訂單查詢</h1>
+      <p class="text-muted">掃描出貨單上的 QRCode,或直接輸入訂單編號查詢出貨進度。</p>
+      <form class="row g-2" action="/order-lookup" onsubmit="event.preventDefault();location.href='/order/'+document.getElementById('oid').value.trim().toUpperCase();">
+        <div class="col-sm-8">
+          <input id="oid" class="form-control form-control-lg" placeholder="例:SO2604001" required>
+        </div>
+        <div class="col-sm-4 d-grid">
+          <button class="btn btn-primary btn-lg">查詢</button>
+        </div>
+      </form>
+      <hr class="my-4">
+      <p class="mb-1 text-muted small">系統今日日期:{{ today }}</p>
+    </div></div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card h-100"><div class="card-body p-4">
+      <h4>這個系統示範了什麼?</h4>
+      <ul class="text-muted">
+        <li>客戶 → 訂單 的<strong>一對多</strong></li>
+        <li>訂單 ↔ 商品 的<strong>多對多</strong>(訂單明細中間表)</li>
+        <li>明細保存<strong>下單當時的單價</strong></li>
+        <li>QRCode 導向訂單頁 → 現場查件</li>
+        <li>後台 CRUD + 營運儀表板</li>
+      </ul>
+    </div></div>
+  </div>
+</div>
+{% endblock %}

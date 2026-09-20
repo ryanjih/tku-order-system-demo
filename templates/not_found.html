@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="card"><div class="card-body p-5 text-center">
+  <h2>查無此訂單</h2>
+  <p class="text-muted">訂單編號 <code>{{ order_id }}</code> 不存在,請確認出貨單上的編號。</p>
+  <a class="btn btn-outline-primary" href="{{ url_for('index') }}">回查詢首頁</a>
+</div></div>
+{% endblock %}

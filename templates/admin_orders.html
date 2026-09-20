@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}訂單管理{% endblock %}
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="page-title mb-0">訂單管理</h1>
+  <a class="btn btn-primary" href="{{ url_for('new_order') }}">＋ 新增訂單</a>
+</div>
+<div class="card mb-3"><div class="card-body py-3">
+  <form class="row g-2">
+    <div class="col-sm-9"><input name="kw" value="{{ kw }}" class="form-control" placeholder="搜尋訂單編號或客戶名稱"></div>
+    <div class="col-sm-3 d-grid"><button class="btn btn-outline-primary">搜尋</button></div>
+  </form>
+</div></div>
+<div class="card"><div class="table-responsive">
+<table class="table table-hover mb-0">
+  <thead><tr><th>訂單編號</th><th>日期</th><th>客戶</th><th>業務</th>
+    <th class="text-end">金額</th><th>狀態</th><th>操作</th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+  <tr>
+    <td><a href="{{ url_for('order_detail', order_id=r['order_id']) }}"><code>{{ r['order_id'] }}</code></a></td>
+    <td>{{ r['order_date'] }}</td>
+    <td>{{ r['customer_name'] }}</td>
+    <td>{{ r['sales_rep'] }}</td>
+    <td class="text-end">{{ '{:,.0f}'.format(r['total']) }}</td>
+    <td>
+      {% set c = {'已完成':'success','已出貨':'info','處理中':'warning','已取消':'secondary'} %}
+      <span class="badge badge-st text-bg-{{ c.get(r['status'],'light') }}">{{ r['status'] }}</span>
+    </td>
+    <td>
+      <form method="post" action="{{ url_for('update_status', order_id=r['order_id']) }}" class="d-flex gap-1">
+        <select name="status" class="form-select form-select-sm" style="width:100px">
+          {% for s in ['處理中','已出貨','已完成','已取消'] %}
+          <option {% if s == r['status'] %}selected{% endif %}>{{ s }}</option>{% endfor %}
+        </select>
+        <button class="btn btn-sm btn-outline-secondary">更新</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div></div>
+<p class="text-muted small mt-2">共顯示 {{ rows|length }} 筆(最多 60 筆)</p>
+{% endblock %}
