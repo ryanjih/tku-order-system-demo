@@ -177,10 +177,7 @@ def new_order():
         for p in products:
             raw = request.form.get("qty_" + p["product_id"], "").strip()
             if raw:
-                if not raw.isdigit() or int(raw) <= 0:
-                    errors.append("%s 的數量必須是正整數" % p["name"])
-                else:
-                    picked.append((p["product_id"], int(raw), p["unit_price"]))
+                picked.append((p["product_id"], int(raw), p["unit_price"]))
         if not picked:
             errors.append("至少要選擇一項商品")
 
